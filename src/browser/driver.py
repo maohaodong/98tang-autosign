@@ -216,8 +216,12 @@ class BrowserDriverManager:
             # 创建驱动
             self.logger.debug("开始初始化浏览器实例")
             if UNDETECTED_AVAILABLE:
-                # 使用undetected-chromedriver，它会自动匹配Chrome版本
-                raw_driver = uc.Chrome(options=options)
+                # 使用webdriver-manager获取匹配的ChromeDriver路径
+                from webdriver_manager.chrome import ChromeDriverManager
+                chromedriver_path = ChromeDriverManager().install()
+                self.logger.debug(f"使用webdriver-manager获取的ChromeDriver路径: {chromedriver_path}")
+                # 传递ChromeDriver路径给undetected-chromedriver
+                raw_driver = uc.Chrome(options=options, driver_executable_path=chromedriver_path)
             else:
                 # 使用webdriver-manager自动管理ChromeDriver版本
                 from webdriver_manager.chrome import ChromeDriverManager
